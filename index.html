@@ -1,75 +1,1680 @@
+```html
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AI Creative Agent</title>
+  <meta name="theme-color" content="#F7F7FB">
+  <title>AI Creative Agent Team — 한 줄에서 시작하는 크리에이티브</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap">
+
+  <style>
+    :root {
+      font-family: 'Pretendard Variable', -apple-system, sans-serif;
+      color: #14142B;
+      background: #F7F7FB;
+      font-synthesis: none;
+      --muted: #6B6B80;
+      --ease: cubic-bezier(.2, 1.3, .3, 1);
+    }
+
+    .page { margin: 0; word-break: keep-all; }
+    .page::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 20;
+      opacity: .04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath filter='url(%23n)' opacity='.5' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, .55);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, .7);
+      box-shadow: 0 30px 80px -30px rgba(76, 70, 160, .25), inset 0 1px 1px #fff;
+    }
+
+    /* 고정 내비게이션 */
+    .nav {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(1080px, calc(100% - 24px));
+      box-sizing: border-box;
+      z-index: 30;
+      border-radius: 50px;
+      padding: 10px 12px 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 14px;
+      font-weight: 750;
+      text-decoration: none;
+      color: inherit;
+      white-space: nowrap;
+    }
+
+    .brand-dot {
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      background: linear-gradient(120deg, #6E8BFF, #A77BFF 40%, #FF8AC8 70%, #FFB37A);
+      box-shadow: inset 0 2px 5px #ffffff80;
+    }
+
+    .nav-links { display: flex; gap: 26px; margin: auto; }
+    .nav-link { font-size: 13px; color: #6B6B80; text-decoration: none; }
+
+    .button {
+      border: 0;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 13px 22px;
+      background: #14142B;
+      color: white;
+      font: 600 13px 'Pretendard Variable', sans-serif;
+      white-space: nowrap;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      transition: transform .3s var(--ease);
+    }
+
+    .button:hover { transform: translateY(-2px); }
+
+    .button:focus-visible,
+    .chip:focus-visible,
+    .nav-link:focus-visible {
+      outline: 3px solid #8065f0;
+      outline-offset: 4px;
+    }
+
+    /* 히어로 */
+    .hero {
+      margin: 12px;
+      border-radius: 36px;
+      position: relative;
+      overflow: hidden;
+      padding: 94px 24px 24px;
+      text-align: center;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 1100px; margin: auto; }
+    .badge { display: inline-block; padding: 7px 12px; border-radius: 30px; font-size: 11px; font-weight: 600; }
+    .badge-dot { color: #7864c9; margin-right: 5px; }
+
+    .eyebrow {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 26px;
+      font-weight: 400;
+      margin: 12px 0;
+      color: #666083;
+    }
+
+    .hero-title {
+      font-size: clamp(40px, 6vw, 88px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -.055em;
+      margin: 8px 0 16px;
+      text-wrap: balance;
+    }
+
+    .gradient-text {
+      background: linear-gradient(120deg, #4F6BFF, #8B5CF6 40%, #EC4899 70%, #FF7A45);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-description {
+      font-size: 15px;
+      line-height: 1.65;
+      color: #56536d;
+      margin: 0 auto 23px;
+      max-width: 600px;
+    }
+
+    .blob {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle, #C4A5FF99, transparent 68%);
+      animation: float 27s ease-in-out infinite alternate;
+      will-change: transform;
+      top: 10%;
+      left: -10%;
+    }
+
+    .blob-two {
+      left: auto;
+      right: -10%;
+      top: 25%;
+      background: radial-gradient(circle, #FFB3D9aa, transparent 68%);
+      animation-delay: -12s;
+    }
+
+    @keyframes float {
+      to { transform: translate(70px, 35px) scale(1.15); }
+    }
+
+    /* 실제 채팅 카드 */
+    .chat-card {
+      max-width: 860px;
+      margin: auto;
+      text-align: left;
+      border-radius: 25px;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .window-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 18px;
+      border-bottom: 1px solid #14142b0a;
+      min-width: 0;
+    }
+
+    .window-dots { display: flex; gap: 4px; flex: none; }
+    .window-dot { width: 6px; height: 6px; border-radius: 50%; background: #a19cae66; }
+
+    .window-title {
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    .connection-dot { width: 6px; height: 6px; border-radius: 50%; background: #a5a1b1; flex: none; }
+    .is-connected .connection-dot { background: #29b888; box-shadow: 0 0 0 3px #29b88815; }
+
+    .reset {
+      margin-left: auto;
+      border: 1px solid #ffffffa0;
+      background: #ffffff66;
+      border-radius: 30px;
+      white-space: nowrap;
+      padding: 6px 10px;
+      font: 11px 'Pretendard Variable', sans-serif;
+      color: #6B6B80;
+      cursor: pointer;
+    }
+
+    .chat-foot { padding: 0 18px 10px; }
+
+    .examples {
+      display: flex;
+      gap: 7px;
+      overflow: auto;
+      scrollbar-width: none;
+      margin: 4px 0 12px;
+    }
+
+    .examples::-webkit-scrollbar { display: none; }
+
+    .chip {
+      border: 1px solid #ffffffb0;
+      background: #ffffff77;
+      border-radius: 999px;
+      padding: 9px 12px;
+      color: #615c78;
+      font: 11px 'Pretendard Variable', sans-serif;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .chip:disabled { opacity: .55; cursor: wait; }
+    .is-started .examples { display: none; }
+
+    .composer {
+      position: relative;
+      border-radius: 29px;
+      background: #ffffffa6;
+      border: 1px solid #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px 9px 21px;
+      transition: transform .3s var(--ease), box-shadow .3s;
+    }
+
+    .composer:focus-within {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px #7660c81a;
+    }
+
+    .input {
+      resize: none;
+      flex: 1;
+      min-width: 0;
+      border: 0;
+      outline: none;
+      background: transparent;
+      font: 14px/22px 'Pretendard Variable', sans-serif;
+      color: #14142B;
+      padding: 8px 0;
+      max-height: 132px;
+      box-sizing: border-box;
+    }
+
+    .send { width: 39px; height: 39px; padding: 0; font-size: 23px; flex: none; }
+    .send:disabled { opacity: .25; cursor: default; }
+    .disclaimer { text-align: center; font-size: 10px; color: #827b92; margin: 9px 0 0; }
+
+    .working {
+      display: none;
+      align-items: center;
+      gap: 9px;
+      font-size: 11px;
+      color: #746392;
+      margin: 0 4px 10px;
+      flex-wrap: wrap;
+    }
+
+    .is-working .working { display: flex; }
+    .working-dots { display: flex; gap: 3px; }
+
+    .working-dot {
+      width: 4px;
+      height: 4px;
+      background: #9773da;
+      border-radius: 50%;
+      animation: pulse 1.4s infinite;
+      animation-delay: calc(var(--i) * .15s);
+    }
+
+    @keyframes pulse {
+      50% { opacity: .2; transform: translateY(-2px); }
+    }
+
+    .slow-note { font-size: 10px; color: #8a7a98; }
+
+    .suggestions {
+      display: flex;
+      gap: 6px;
+      overflow: auto;
+      margin-bottom: 8px;
+      scrollbar-width: none;
+    }
+
+    .suggestions:empty { display: none; }
+    .error-box { display: none; padding: 10px 0 5px; }
+    .is-error .error-box { display: block; }
+    .is-error .composer { display: none; }
+    .error-title { font-size: 13px; margin: 0 0 8px; }
+
+    .error-detail {
+      font: 10px/1.5 ui-monospace, monospace;
+      color: #81778c;
+      overflow-wrap: anywhere;
+      max-height: 65px;
+      overflow: auto;
+      margin: 0 0 10px;
+    }
+
+    .connection-status { font-size: 11px; color: #777186; margin: 8px 4px; }
+    .is-connected .connection-status,
+    .is-error .connection-status { display: none; }
+
+    .logos {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      max-width: 1000px;
+      margin: 28px auto 0;
+      font-size: 12px;
+      font-weight: 650;
+      color: #69627f99;
+    }
+
+    /* 숫자와 기능 */
+    .stats {
+      max-width: 940px;
+      margin: 58px auto 70px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      text-align: center;
+    }
+
+    .stat { border-right: 1px solid #14142b10; }
+    .stat:last-child { border: 0; }
+    .stat-number { font-size: 38px; font-weight: 700; letter-spacing: -.05em; }
+    .stat-label { font-size: 12px; color: #777286; margin: 8px 0 0; }
+
+    .section {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 30px 24px 80px;
+      scroll-margin-top: 96px;
+    }
+
+    .section-heading { text-align: center; margin-bottom: 34px; }
+
+    .section-title {
+      font-size: clamp(32px, 4.2vw, 56px);
+      line-height: 1.1;
+      letter-spacing: -.04em;
+      font-weight: 800;
+      text-wrap: balance;
+      margin: 10px 0;
+    }
+
+    .bento { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; }
+
+    .feature {
+      grid-column: span 2;
+      border-radius: 26px;
+      overflow: hidden;
+      padding: 22px;
+      background: linear-gradient(145deg, #ffffffc0, #edeaf566);
+    }
+
+    .feature-wide { grid-column: span 3; }
+    .feature-title { font-size: 20px; letter-spacing: -.035em; margin: 15px 0 9px; }
+    .feature-copy { font-size: 13px; line-height: 1.6; color: #6B6B80; min-height: 42px; margin: 0 0 19px; }
+    .filename { font: 10px ui-monospace, monospace; color: #8a829c; }
+
+    .mockup {
+      height: 180px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform .6s var(--ease);
+    }
+
+    .feature:hover .mockup { transform: translateY(-5px); }
+
+    /* HTML/CSS 목업 */
+    .slide {
+      position: absolute;
+      width: 185px;
+      height: 113px;
+      background: #fff;
+      border: 1px solid #fff;
+      border-radius: 8px;
+      box-shadow: 0 15px 28px #79729920;
+      padding: 17px;
+      box-sizing: border-box;
+      transition: transform .6s var(--ease);
+    }
+
+    .slide-one { transform: translate(-45px, 5px) rotate(-12deg); background: #ddd4ff; }
+    .slide-two { transform: translate(43px, 4px) rotate(12deg); background: #fde0eb; }
+    .slide-three { transform: rotate(-2deg); background: linear-gradient(130deg, #b9c9ff, #f3d4ec); }
+    .feature:hover .slide-one { transform: translate(-65px, 7px) rotate(-20deg); }
+    .feature:hover .slide-two { transform: translate(65px, 7px) rotate(20deg); }
+
+    .mock-label { font-size: 8px; letter-spacing: .15em; color: #585076; }
+    .mock-title { font-size: 25px; line-height: 1.05; font-weight: 750; letter-spacing: -.04em; margin: 12px 0; }
+    .mock-rule { width: 60%; height: 4px; border-radius: 5px; background: #a89dc433; margin: 7px 0; }
+
+    .poster {
+      height: 165px;
+      width: 122px;
+      padding: 15px;
+      box-sizing: border-box;
+      border-radius: 6px;
+      transform: rotate(8deg);
+      background: linear-gradient(155deg, #5444b2, #e97eb6 65%, #ffd192);
+      color: white;
+      box-shadow: 0 15px 30px #88569833;
+    }
+
+    .poster-title { font: italic 36px/.95 'Instrument Serif', serif; margin: 18px 0; }
+    .poster-small { font-size: 6px; letter-spacing: .16em; }
+
+    .document {
+      width: 128px;
+      height: 154px;
+      border-radius: 5px;
+      background: white;
+      padding: 15px;
+      box-sizing: border-box;
+      box-shadow: 0 12px 25px #80739a22;
+      transform: rotate(-6deg);
+    }
+
+    .document-band {
+      height: 48px;
+      background: linear-gradient(120deg, #a9bfff, #e4cbf3);
+      border-radius: 3px;
+      margin-bottom: 18px;
+      font-size: 12px;
+      padding: 7px;
+      box-sizing: border-box;
+    }
+
+    .browser {
+      width: 215px;
+      border: 1px solid white;
+      background: #fff9;
+      border-radius: 9px;
+      padding: 9px;
+      box-shadow: 0 15px 20px #77749a15;
+      transform: rotate(4deg);
+    }
+
+    .browser-dots { font-size: 9px; color: #b6adca; margin-bottom: 8px; }
+
+    .mini-hero {
+      background: linear-gradient(120deg, #b8c8ff, #efd2e9, #ffddbd);
+      padding: 20px 10px;
+      border-radius: 5px;
+      font: italic 25px 'Instrument Serif', serif;
+      text-align: center;
+    }
+
+    .mini-cards { display: flex; gap: 5px; margin-top: 7px; }
+    .mini-card { height: 25px; background: #ebe6f4; flex: 1; border-radius: 4px; }
+
+    .budget {
+      width: 215px;
+      padding: 16px;
+      border-radius: 11px;
+      background: #fff9;
+      box-shadow: 0 15px 20px #77749a15;
+      box-sizing: border-box;
+    }
+
+    .budget-number { font-size: 24px; letter-spacing: -.05em; font-weight: 750; margin: 7px 0 12px; }
+    .bars { height: 62px; display: flex; gap: 9px; align-items: end; border-bottom: 1px solid #e7e1ee; }
+
+    .bar {
+      flex: 1;
+      height: var(--h);
+      background: linear-gradient(#b7a4f0, #e0d6fb);
+      border-radius: 4px 4px 0 0;
+      transform: scaleY(.05);
+      transform-origin: bottom;
+      transition: transform 1.2s var(--ease);
+    }
+
+    .in-view .bar { transform: scaleY(1); }
+
+    /* 작동 방식 */
+    .how-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+
+    .orbit-card {
+      overflow: hidden;
+      border-radius: 30px;
+      background: radial-gradient(circle, #e5ddfb, #f0edf666 65%);
+      padding: 30px 0;
+    }
+
+    .leader {
+      background: linear-gradient(145deg, #ffffffdd, #e4d8fc88);
+      border: 1px solid white;
+      box-shadow: 0 12px 35px #8971ca30;
+    }
+
+    .step { display: flex; gap: 18px; margin: 26px 0; }
+
+    .step-number {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      background: #eae5f6;
+      border-radius: 50%;
+      font-size: 12px;
+      color: #8673b0;
+      flex: none;
+    }
+
+    .step-title { font-size: 16px; margin: 3px 0 7px; }
+    .step-copy { font-size: 13px; line-height: 1.7; color: #6B6B80; margin: 0; }
+
+    /* 테마 */
+    .design {
+      padding: 65px 24px 72px;
+      background: linear-gradient(115deg, #5B3DF5, #FF4FA3 65%, #FF9F45);
+      color: white;
+      overflow: hidden;
+      scroll-margin-top: 96px;
+    }
+
+    .light-eyebrow { color: #fffc; }
+    .design-description { font-size: 14px; color: #fffd; margin: 17px 0; }
+    .themes { max-width: 1080px; margin: 35px auto 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+
+    .theme {
+      background: #ffffff1f;
+      border: 1px solid #ffffff50;
+      border-radius: 20px;
+      padding: 22px 16px;
+      box-shadow: inset 0 1px 0 #ffffff30;
+    }
+
+    .swatches { display: flex; margin-bottom: 24px; }
+    .swatch { width: 29px; height: 29px; border-radius: 50%; background: var(--color); border: 2px solid #ffffff77; }
+    .swatch + .swatch { margin-left: -7px; }
+    .theme-name { font-size: 15px; font-weight: 650; margin: 0 0 7px; }
+    .theme-use { font-size: 11px; color: #fffc; line-height: 1.5; margin: 0; }
+
+    /* 예시 요청과 마지막 CTA */
+    .prompts { padding: 65px 0; overflow: hidden; }
+    .marquee { display: flex; gap: 12px; width: max-content; animation: marquee 45s linear infinite; padding: 7px 0; }
+    .marquee-reverse { animation-direction: reverse; }
+    .marquee:hover,
+    .marquee:focus-within { animation-play-state: paused; }
+    .marquee .chip { font-size: 14px; padding: 15px 21px; background: #ffffff99; border-color: #fff; }
+
+    @keyframes marquee {
+      to { transform: translateX(-50%); }
+    }
+
+    .cta {
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      margin: 0 12px 12px;
+      border-radius: 36px;
+      padding: 75px 24px;
+    }
+
+    .cta-title {
+      font-size: clamp(40px, 6vw, 88px);
+      line-height: 1.1;
+      font-weight: 800;
+      letter-spacing: -.05em;
+      margin: 15px 0 30px;
+    }
+
+    .footer {
+      max-width: 1080px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 28px 24px 35px;
+      font-size: 11px;
+      color: #8c869b;
+    }
+
+    .footer-brand { font-weight: 700; color: #6B6B80; }
+
+    .floating {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 25;
+      border-radius: 40px;
+      padding: 15px 20px;
+      font: 12px 'Pretendard Variable', sans-serif;
+      color: #615276;
+      cursor: pointer;
+    }
+
+    .floating[hidden] { display: none; }
+    .reveal-pending { opacity: 0; transform: translateY(20px); filter: blur(5px); }
+
+    .reveal {
+      transition: opacity .75s, transform .75s var(--ease), filter .75s;
+      transition-delay: var(--delay, 0ms);
+    }
+
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .nav { gap: 8px; padding-left: 13px; }
+      .brand { font-size: 11px; gap: 6px; }
+      .brand-dot { width: 19px; height: 19px; }
+      .nav .button { margin-left: auto; padding: 11px 13px; font-size: 11px; }
+      .hero { padding: 88px 12px 24px; border-radius: 28px; }
+      .hero-title { font-size: 40px; margin: 7px 0 12px; }
+      .eyebrow { font-size: 23px; margin: 9px 0; }
+      .hero-description { font-size: 12px; max-width: 320px; margin-bottom: 16px; }
+      .badge { font-size: 10px; }
+      .chat-card { border-radius: 20px; }
+      .window-bar { padding: 11px 12px; gap: 8px; }
+      .window-title { font-size: 10px; }
+      .chat-foot { padding: 0 10px 10px; }
+      .chip { font-size: 10px; padding: 8px 10px; }
+      .examples { margin-bottom: 9px; }
+      .input { font-size: 12px; }
+      .composer { padding-left: 15px; }
+      .logos { gap: 12px 18px; font-size: 9px; margin-top: 22px; }
+      .stats { margin: 35px 15px 30px; }
+      .stat-number { font-size: 29px; }
+      .stat-label { font-size: 10px; }
+      .section { padding: 25px 20px 50px; }
+      .section-title { font-size: 32px; }
+      .bento { grid-template-columns: 1fr; }
+      .feature,
+      .feature-wide { grid-column: auto; }
+      .feature-copy { min-height: 0; }
+      .mockup { height: 170px; }
+      .how-grid { grid-template-columns: 1fr; gap: 12px; }
+      .orbit-card { padding: 10px 0; }
+      .step { margin: 20px 0; }
+      .themes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .theme:last-child { grid-column: span 2; }
+      .theme { padding: 17px; }
+      .swatches { margin-bottom: 15px; }
+      .design { padding: 45px 20px; }
+      .prompts { padding: 45px 0; }
+      .cta { padding: 50px 18px; border-radius: 28px; }
+      .footer { flex-wrap: wrap; gap: 10px; }
+      .floating { bottom: 15px; right: 15px; }
+      .slow-note { width: 100%; }
+    }
+
+    @media (min-width: 701px) and (max-height: 950px) {
+      .hero { padding-top: 88px; }
+      .hero-title { font-size: clamp(40px, 5vw, 72px); margin: 6px 0 10px; }
+      .hero-description { margin-bottom: 15px; }
+      .eyebrow { margin: 6px 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .blob,
+      .orbit-ring,
+      .orbit .agent b,
+      .marquee,
+      .working-dot,
+      .composer::before { animation: none !important; }
+
+      .reveal,
+      .bar,
+      .mockup,
+      .slide,
+      .composer,
+      .button { transition: none !important; }
+
+      .reveal-pending { opacity: 1; transform: none; filter: none; }
+    }
+
+    /* 히어로·CTA 패널: 메시 그라데이션 */
+    .mesh {
+      background:
+        radial-gradient(circle at 16% 18%, #8EA2FF 0 14%, transparent 32%),
+        radial-gradient(circle at 78% 9%, #FFB3D9 0 13%, transparent 30%),
+        radial-gradient(circle at 66% 62%, #FFD3A8 0 16%, transparent 34%),
+        radial-gradient(circle at 25% 74%, #9BE3FF 0 15%, transparent 32%),
+        radial-gradient(circle at 50% 32%, #C4A5FF 0 16%, transparent 36%),
+        linear-gradient(135deg, #fff, #F5F0FF 40%, #FFF7F0);
+    }
+
+    /* 링만 회전하고 글자는 똑바로 유지 */
+    .orbit {
+      --r: 150px;
+      position: relative;
+      width: calc(var(--r) * 2);
+      aspect-ratio: 1;
+      margin: 48px auto;
+    }
+
+    .orbit-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 1px dashed rgba(20, 20, 43, .16);
+      animation: orbit-spin 40s linear infinite;
+    }
+
+    .orbit .agent {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: rotate(var(--a)) translateX(var(--r)) rotate(calc(-1 * var(--a)));
+    }
+
+    .orbit .agent b {
+      position: absolute;
+      translate: -50% -50%;
+      white-space: nowrap;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: #5B4BC4;
+      background: rgba(255, 255, 255, .8);
+      border: 1px solid #fff;
+      animation: orbit-spin 40s linear infinite reverse;
+    }
+
+    .orbit .leader {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      translate: -50% -50%;
+      width: 112px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    @keyframes orbit-spin {
+      to { rotate: 360deg; }
+    }
+
+    @media (max-width: 600px) {
+      .orbit { --r: 100px; }
+      .orbit .agent b { font-size: 10px; padding: 6px 9px; }
+      .orbit .leader { width: 84px; }
+    }
+
+    /* 첫 메시지를 보내면 화면 높이로 확장 */
+    .chat-card { display: flex; flex-direction: column; }
+    .chat-card > * { flex: none; }
+    .chat-card > #webchat { height: 200px; min-height: 0; }
+    body.is-started .chat-card { height: calc(100svh - 112px); }
+    body.is-started .chat-card > #webchat { flex: 1 1 0; height: auto; min-height: 0; }
+
+    /* 작업 중 오로라 테두리 */
+    @property --aurora {
+      syntax: "<angle>";
+      inherits: false;
+      initial-value: 0deg;
+    }
+
+    .composer::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      padding: 1.5px;
+      border-radius: inherit;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .6s;
+      background: conic-gradient(from var(--aurora), #a5b4fc, #f0abfc, #fda4af, #fcd34d, #86efac, #67e8f9, #a5b4fc);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: aurora 6s linear infinite;
+    }
+
+    body.is-working .composer::before { opacity: .8; }
+
+    @keyframes aurora {
+      to { --aurora: 360deg; }
+    }
+
+    /* Web Chat 기본 요소와 첨부 카드 */
+    #webchat .webchat__typing-indicator { display: none !important; }
+
+    #webchat .webchat__stacked-layout:not(.webchat__stacked-layout--from-user) .webchat__stacked-layout__status {
+      display: none;
+    }
+
+    #webchat .webchat__stacked-layout__attachment-row { margin-top: 8px !important; }
+
+    #webchat .webchat__stacked-layout__attachment,
+    #webchat .webchat__stacked-layout__attachment .webchat__bubble__content {
+      background: none !important;
+      border: 0 !important;
+      overflow: visible !important;
+    }
+
+    #webchat .webchat__stacked-layout__content:has(.webchat__fileContent) { overflow: visible !important; }
+    #webchat .webchat__fileContent { padding: 0 !important; }
+
+    #webchat .webchat__fileContent__buttonLink {
+      display: flex !important;
+      align-items: center;
+      gap: 12px;
+      height: 56px;
+      padding: 0 18px 0 12px;
+      border-radius: 18px;
+      text-decoration: none;
+      color: #14142B;
+      background: rgba(255, 255, 255, .72);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, .8);
+      box-shadow: 0 10px 24px -16px rgba(76, 70, 160, .3), inset 0 1px 1px #fff;
+    }
+
+    #webchat .webchat__fileContent__buttonLink::before {
+      content: "FILE";
+      flex: none;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: linear-gradient(120deg, #EEF0FF, #FBEFFF);
+      color: #5B4BC4;
+      font: 600 10.5px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .04em;
+    }
+
+    #webchat a[download$=".pptx" i]::before { content: "PPTX"; }
+    #webchat a[download$=".docx" i]::before { content: "DOCX"; }
+    #webchat a[download$=".xlsx" i]::before { content: "XLSX"; }
+    #webchat a[download$=".html" i]::before { content: "HTML"; }
+
+    #webchat .webchat__fileContent__badge {
+      flex: 1;
+      min-width: 0;
+      background: none !important;
+      padding: 0 !important;
+    }
+
+    #webchat .webchat__fileContent__fileName {
+      font: 13px ui-monospace, SFMono-Regular, Menlo, monospace !important;
+      color: #14142B !important;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #webchat .webchat__fileContent__downloadIcon {
+      flex: none;
+      box-sizing: content-box;
+      width: 16px;
+      height: 16px;
+      padding: 0;
+      fill: #6B6B80;
+      color: #6B6B80;
+    }
+
+    /* 한글 줄바꿈과 마크다운 표 */
+    #webchat .webchat__render-markdown {
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+      line-height: 1.7;
+    }
+
+    #webchat .webchat__render-markdown table {
+      display: block;
+      max-width: 100%;
+      overflow-x: auto;
+      border-collapse: collapse;
+      border-spacing: 0;
+      margin: 12px 0;
+      font-variant-numeric: tabular-nums;
+    }
+
+    #webchat .webchat__render-markdown th,
+    #webchat .webchat__render-markdown td {
+      padding: 9px 18px 9px 0;
+      border-bottom: 1px solid rgba(20, 20, 43, .08);
+      white-space: nowrap;
+    }
+
+    #webchat .webchat__render-markdown th {
+      font-size: 12px;
+      font-weight: 600;
+      color: #6B6B80;
+    }
+
+    #webchat .webchat__stacked-layout__speaker-name { display: none; }
+  </style>
 </head>
-<body>
-  <p id="status" role="status" aria-live="polite">채팅에 연결하는 중입니다...</p>
-  <div id="webchat" style="height: 600px"></div>
+
+<body class="page">
+  <nav class="nav glass" aria-label="주 메뉴">
+    <a class="brand" href="#">
+      <span class="brand-dot"></span>
+      AI Creative Agent Team
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" href="#features">기능</a>
+      <a class="nav-link" href="#how">작동 방식</a>
+      <a class="nav-link" href="#design">디자인</a>
+    </div>
+    <button class="button" data-chat>
+      지금 써 보기 <span aria-hidden="true">↗</span>
+    </button>
+  </nav>
+
+  <main>
+    <header class="hero mesh">
+      <div class="blob"></div>
+      <div class="blob blob-two"></div>
+
+      <div class="hero-content">
+        <div class="badge glass">
+          <span class="badge-dot">●</span>Copilot Studio 멀티 에이전트
+        </div>
+        <p class="eyebrow">One idea, five deliverables.</p>
+        <h1 class="hero-title">
+          한 줄의 아이디어,<br>
+          <span class="gradient-text">다섯 개의 결과물.</span>
+        </h1>
+        <p class="hero-description">
+          팀장 에이전트가 전문가 다섯에게 일을 나눠,<br>
+          발표자료부터 예산 분석까지 한 번에 만들어 드려요.
+        </p>
+
+        <section class="chat-card glass" aria-label="AI Creative Agent Team 대화">
+          <div class="window-bar">
+            <div class="window-dots" aria-hidden="true">
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+            </div>
+            <span class="window-title">AI Creative Agent Team</span>
+            <span class="connection-dot" aria-hidden="true"></span>
+            <button class="reset" id="reset">새 대화 ↻</button>
+          </div>
+
+          <div id="webchat" role="region" aria-label="대화 내용"></div>
+
+          <div class="chat-foot">
+            <div class="examples" id="examples"></div>
+
+            <p class="connection-status" id="status" role="status" aria-live="polite">
+              팀을 부르는 중…
+            </p>
+
+            <div class="working" role="status" aria-live="polite">
+              <span class="working-dots" aria-hidden="true">
+                <span class="working-dot" style="--i:0"></span>
+                <span class="working-dot" style="--i:1"></span>
+                <span class="working-dot" style="--i:2"></span>
+                <span class="working-dot" style="--i:3"></span>
+                <span class="working-dot" style="--i:4"></span>
+              </span>
+              <span id="working-text">팀이 작업 중 · 0:00</span>
+              <span class="slow-note" id="slow-note" hidden>
+                파일 5개를 만드느라 몇 분 걸릴 수 있어요
+              </span>
+            </div>
+
+            <div class="suggestions" id="suggestions" aria-label="추천 응답"></div>
+
+            <form class="composer" id="composer">
+              <textarea
+                class="input"
+                id="message"
+                rows="1"
+                placeholder="무엇을 만들어 볼까요?"
+                aria-label="팀에게 보낼 메시지"
+                disabled
+              ></textarea>
+              <button
+                class="button send"
+                id="send"
+                type="submit"
+                aria-label="메시지 보내기"
+                disabled
+              >↑</button>
+            </form>
+
+            <div class="error-box" role="alert">
+              <p class="error-title">지금은 팀과 연결할 수 없어요</p>
+              <p class="error-detail" id="error-detail"></p>
+              <button class="button" id="retry">다시 시도 ↻</button>
+            </div>
+
+            <p class="disclaimer">AI는 실수할 수 있어요. 중요한 내용은 확인하세요.</p>
+          </div>
+        </section>
+
+        <div class="logos">
+          <span>Microsoft Copilot Studio</span>
+          <span>Claude Opus 5.5</span>
+          <span>PowerPoint</span>
+          <span>Word</span>
+          <span>Excel</span>
+          <span>HTML</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="stats" data-reveal>
+      <div class="stat">
+        <span class="stat-number" data-count="1">0</span>
+        <p class="stat-label">번의 요청</p>
+      </div>
+      <div class="stat">
+        <span class="stat-number" data-count="6">0</span>
+        <p class="stat-label">명의 에이전트</p>
+      </div>
+      <div class="stat">
+        <span class="stat-number" data-count="7">0</span>
+        <p class="stat-label">개의 작업 매뉴얼</p>
+      </div>
+      <div class="stat">
+        <span class="stat-number" data-count="5">0</span>
+        <p class="stat-label">개의 파일</p>
+      </div>
+    </div>
+
+    <section class="section" id="features">
+      <div class="section-heading" data-reveal>
+        <p class="eyebrow">Five deliverables.</p>
+        <h2 class="section-title">한 번의 요청으로 받는 다섯 가지</h2>
+      </div>
+
+      <div class="bento">
+        <article class="feature glass feature-wide" data-reveal>
+          <div class="mockup" aria-hidden="true">
+            <div class="slide slide-one"></div>
+            <div class="slide slide-two"></div>
+            <div class="slide slide-three">
+              <div class="mock-label">YOUR NEXT BIG IDEA</div>
+              <div class="mock-title">Ideas into<br>impact.</div>
+              <div class="mock-rule"></div>
+            </div>
+          </div>
+          <h3 class="feature-title">말할 거리가 정리된 10장</h3>
+          <p class="feature-copy">10장 내외 슬라이드와 발표자 노트까지</p>
+          <span class="filename">↳ presentation.pptx</span>
+        </article>
+
+        <article class="feature glass feature-wide" data-reveal>
+          <div class="mockup" aria-hidden="true">
+            <div class="poster">
+              <div class="poster-small">CREATE SOMETHING GREAT</div>
+              <div class="poster-title">Make<br>it<br>happen.</div>
+              <div class="poster-small">2026 · YOUR NEXT CHAPTER</div>
+            </div>
+          </div>
+          <h3 class="feature-title">걸어 두고 싶은 한 장</h3>
+          <p class="feature-copy">브라우저에서 바로 여는 유리 질감 포스터, 인쇄·PDF 저장도</p>
+          <span class="filename">↳ poster.html</span>
+        </article>
+
+        <article class="feature glass" data-reveal>
+          <div class="mockup" aria-hidden="true">
+            <div class="document">
+              <div class="document-band">A better<br>beginning.</div>
+              <div class="mock-rule"></div>
+              <div class="mock-rule"></div>
+              <div class="mock-rule"></div>
+              <div class="mock-rule"></div>
+              <div class="mock-rule"></div>
+            </div>
+          </div>
+          <h3 class="feature-title">바로 보낼 수 있는 제안서</h3>
+          <p class="feature-copy">테마 색 표지와 읽기 좋은 흰 본문</p>
+          <span class="filename">↳ proposal.docx</span>
+        </article>
+
+        <article class="feature glass" data-reveal>
+          <div class="mockup" aria-hidden="true">
+            <div class="browser">
+              <div class="browser-dots">● ● ●</div>
+              <div class="mini-hero">Hello, possibility.</div>
+              <div class="mini-cards">
+                <div class="mini-card"></div>
+                <div class="mini-card"></div>
+                <div class="mini-card"></div>
+              </div>
+            </div>
+          </div>
+          <h3 class="feature-title">신청까지 받는 랜딩</h3>
+          <p class="feature-copy">유리 메뉴 바와 카드로 만든 소개·신청 페이지</p>
+          <span class="filename">↳ webpage.html</span>
+        </article>
+
+        <article class="feature glass" data-reveal>
+          <div class="mockup" aria-hidden="true">
+            <div class="budget">
+              <div class="mock-label">TOTAL BUDGET</div>
+              <div class="budget-number">₩12,400,000</div>
+              <div class="bars">
+                <div class="bar" style="--h:38%"></div>
+                <div class="bar" style="--h:65%"></div>
+                <div class="bar" style="--h:48%"></div>
+                <div class="bar" style="--h:90%"></div>
+                <div class="bar" style="--h:72%"></div>
+                <div class="bar" style="--h:100%"></div>
+              </div>
+            </div>
+          </div>
+          <h3 class="feature-title">숫자가 맞는 예산</h3>
+          <p class="feature-copy">숫자 카드와 차트, 합계는 수식으로</p>
+          <span class="filename">↳ budget_analysis.xlsx</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="section-heading" data-reveal>
+        <p class="eyebrow">How the team works.</p>
+        <h2 class="section-title">팀장 하나, 전문가 다섯,<br>매뉴얼 일곱.</h2>
+      </div>
+
+      <div class="how-grid">
+        <div class="orbit-card glass" data-reveal>
+          <div class="orbit">
+            <div class="orbit-ring">
+              <span class="agent" style="--a:0deg"><b>ppt-agent</b></span>
+              <span class="agent" style="--a:72deg"><b>poster-agent</b></span>
+              <span class="agent" style="--a:144deg"><b>proposal-agent</b></span>
+              <span class="agent" style="--a:216deg"><b>webpage-agent</b></span>
+              <span class="agent" style="--a:288deg"><b>budget-agent</b></span>
+            </div>
+            <div class="leader">팀장</div>
+          </div>
+        </div>
+
+        <div data-reveal>
+          <div class="step">
+            <span class="step-number">01</span>
+            <div>
+              <h3 class="step-title">브리프</h3>
+              <p class="step-copy">요청을 한 장짜리 기획서로 정리하고 컬러 테마를 정해요</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">02</span>
+            <div>
+              <h3 class="step-title">예산 먼저</h3>
+              <p class="step-copy">budget-agent가 예산 기준표로 모든 금액의 기준을 잡아요</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">03</span>
+            <div>
+              <h3 class="step-title">원고</h3>
+              <p class="step-copy">전문가들이 같은 브리프로 각자 원고를 써요</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">04</span>
+            <div>
+              <h3 class="step-title">파일 5개</h3>
+              <p class="step-copy">디자인 규칙에 맞춰 파일을 만들어 한 번에 첨부해요</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="design" id="design">
+      <div class="section-heading" data-reveal>
+        <p class="eyebrow light-eyebrow">One design language.</p>
+        <h2 class="section-title">다섯 파일,<br>하나의 리퀴드 글래스.</h2>
+        <p class="design-description">재질과 레이아웃은 늘 같고, 색만 주제에 맞게 바뀝니다.</p>
+      </div>
+
+      <div class="themes">
+        <div class="theme" data-reveal>
+          <div class="swatches" aria-hidden="true">
+            <span class="swatch" style="--color:#A8D8FF"></span>
+            <span class="swatch" style="--color:#007AFF"></span>
+          </div>
+          <h3 class="theme-name">스카이</h3>
+          <p class="theme-use">교육·일반 행사</p>
+        </div>
+
+        <div class="theme" data-reveal>
+          <div class="swatches" aria-hidden="true">
+            <span class="swatch" style="--color:#1EC8FF"></span>
+            <span class="swatch" style="--color:#FF2E93"></span>
+          </div>
+          <h3 class="theme-name">팝</h3>
+          <p class="theme-use">IT 캠페인·축제</p>
+        </div>
+
+        <div class="theme" data-reveal>
+          <div class="swatches" aria-hidden="true">
+            <span class="swatch" style="--color:#0B1628"></span>
+            <span class="swatch" style="--color:#6EA8FF"></span>
+          </div>
+          <h3 class="theme-name">네이비</h3>
+          <p class="theme-use">공공 보고서·정책</p>
+        </div>
+
+        <div class="theme" data-reveal>
+          <div class="swatches" aria-hidden="true">
+            <span class="swatch" style="--color:#A8E3C4"></span>
+            <span class="swatch" style="--color:#12A150"></span>
+          </div>
+          <h3 class="theme-name">그린</h3>
+          <p class="theme-use">환경·ESG</p>
+        </div>
+
+        <div class="theme" data-reveal>
+          <div class="swatches" aria-hidden="true">
+            <span class="swatch" style="--color:#FFC2B3"></span>
+            <span class="swatch" style="--color:#FF6B4A"></span>
+          </div>
+          <h3 class="theme-name">코럴</h3>
+          <p class="theme-use">가족·복지</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="prompts">
+      <div class="section-heading" data-reveal>
+        <p class="eyebrow">Ready prompts.</p>
+        <h2 class="section-title">이런 요청에 강해요</h2>
+      </div>
+
+      <div class="marquee">
+        <button class="chip" data-prompt="가을 학교 축제">가을 학교 축제 ↗</button>
+        <button class="chip" data-prompt="탄소중립 캠페인">탄소중립 캠페인 ↗</button>
+        <button class="chip" data-prompt="교사 AI 연수">교사 AI 연수 ↗</button>
+        <button class="chip" data-prompt="신제품 런칭 행사">신제품 런칭 행사 ↗</button>
+        <button class="chip" data-prompt="진로 체험 주간">진로 체험 주간 ↗</button>
+        <button class="chip" data-prompt="가을 학교 축제" tabindex="-1" aria-hidden="true">가을 학교 축제 ↗</button>
+        <button class="chip" data-prompt="탄소중립 캠페인" tabindex="-1" aria-hidden="true">탄소중립 캠페인 ↗</button>
+        <button class="chip" data-prompt="교사 AI 연수" tabindex="-1" aria-hidden="true">교사 AI 연수 ↗</button>
+        <button class="chip" data-prompt="신제품 런칭 행사" tabindex="-1" aria-hidden="true">신제품 런칭 행사 ↗</button>
+        <button class="chip" data-prompt="진로 체험 주간" tabindex="-1" aria-hidden="true">진로 체험 주간 ↗</button>
+      </div>
+
+      <div class="marquee marquee-reverse">
+        <button class="chip" data-prompt="지역 축제 홍보">지역 축제 홍보 ↗</button>
+        <button class="chip" data-prompt="고객 제안 워크숍">고객 제안 워크숍 ↗</button>
+        <button class="chip" data-prompt="학부모 설명회">학부모 설명회 ↗</button>
+        <button class="chip" data-prompt="해커톤">해커톤 ↗</button>
+        <button class="chip" data-prompt="동아리 박람회">동아리 박람회 ↗</button>
+        <button class="chip" data-prompt="지역 축제 홍보" tabindex="-1" aria-hidden="true">지역 축제 홍보 ↗</button>
+        <button class="chip" data-prompt="고객 제안 워크숍" tabindex="-1" aria-hidden="true">고객 제안 워크숍 ↗</button>
+        <button class="chip" data-prompt="학부모 설명회" tabindex="-1" aria-hidden="true">학부모 설명회 ↗</button>
+        <button class="chip" data-prompt="해커톤" tabindex="-1" aria-hidden="true">해커톤 ↗</button>
+        <button class="chip" data-prompt="동아리 박람회" tabindex="-1" aria-hidden="true">동아리 박람회 ↗</button>
+      </div>
+    </section>
+
+    <section class="cta mesh">
+      <p class="eyebrow" data-reveal>Your turn.</p>
+      <h2 class="cta-title" data-reveal>지금, 아이디어 한 줄을<br>적어 보세요.</h2>
+      <button class="button" data-chat>대화 시작하기 ↑</button>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span class="footer-brand">AI Creative Agent Team</span>
+    <span>Copilot Studio로 만든 멀티 에이전트</span>
+    <span>© 2026</span>
+  </footer>
+
+  <button class="floating glass" id="floating" hidden></button>
+
   <script src="https://cdn.botframework.com/botframework-webchat/4.18.0/webchat.js"></script>
   <script>
-    const BROKER_URL = "https://dl-broker-juwon-4jt3z.azurewebsites.net/api/directlineToken";
-    const SEALED = "ePTj6LDaH2emLimO-MTk5WA3v4tcqHUlbJDVvP22AP4fzw7gMnrRuY7C9JckVoLlc2TppJ6fi0IMWTDV3MGKctd9MTLj8IHu6RT6477JBHz8WSxHI_YU4GK9Yb84yYAmSRN2O7owtGzORVb_mGwtgJ6_KgdcnFMZY7Z3VyaFvPL_MXbsNtulonfaZcP3g3S2wArBOhnqLsapxfwQN943BYnEAwcO0X1kIZ_bzcLE1AVz0QYTKrbqwKOARe3ZeBNsrioNrAk-GFkZjdj0MTfHH19wqaKQqjQtqYRyJ0EoDMo50frvT0eEeONEUkRb1RkpHMkeBHSnieb4ibtYo9rT3YFZcIlepAJC9IZG8mVkjKneJRO73x7rn6ga2rBUjcYtNese2lBubMciOzBDJvppIqvGoiUquTJq9ESSVfE6KRsDbZXNfXXgPtuGAAWIeju74oXQxpktckNH5YhdveIOKE2-lQHHKxCluKLgAmdzFURK550oXZB97puHPjE6oRG7hGW1kANxzRca-OmrrmoBPiqWIQcsByWZnpyeT5KvURqOui_QNlzqn8a3cVSLVW6fUGmL0toA1M428-r36KgAGkXfG0sEmtf1bxSN8iDWDvwhc8ZeZNDvKX1I2gFTWITkrlFwH757hw6JDbdhUNDh";
-    const status = document.getElementById("status");
+    // ① 등장 효과 · 숫자 · 이동 버튼
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const card = document.querySelector('.chat-card');
+    const input = document.getElementById('message');
+    const sendButton = document.getElementById('send');
+
+    let store, directLine, connectionSubscription;
+    let connected = false;
+    let workingSince = 0;
+    let resultReady = false;
+    let cardVisible = true;
+
+    function goToChat() {
+      window.scrollTo({
+        top: card.getBoundingClientRect().top + window.scrollY - 88,
+        behavior: "smooth"
+      });
+      input.focus({ preventScroll: true });
+    }
+
+    document.querySelectorAll('[data-chat]').forEach(button => {
+      button.addEventListener('click', goToChat);
+    });
+
+    document.querySelectorAll('[data-prompt]').forEach(button => {
+      button.addEventListener('click', () => {
+        input.value = button.dataset.prompt + ' 기획해 줘';
+        resizeInput();
+        goToChat();
+      });
+    });
+
+    document.getElementById('reset').addEventListener('click', () => {
+      window.location.reload();
+    });
+
+    function countUp(element) {
+      const end = Number(element.dataset.count);
+      const start = performance.now();
+
+      function tick(now) {
+        const progress = reducedMotion ? 1 : Math.min((now - start) / 950, 1);
+        element.textContent = Math.round(end * (1 - Math.pow(1 - progress, 3)));
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+
+          entry.target.classList.remove('reveal-pending');
+          entry.target.classList.add('in-view');
+          entry.target.querySelectorAll('[data-count]').forEach(countUp);
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: .12 });
+
+      document.querySelectorAll('[data-reveal]').forEach((element, index) => {
+        element.classList.add('reveal', 'reveal-pending');
+        element.style.setProperty('--delay', (index % 3) * 80 + 'ms');
+        observer.observe(element);
+      });
+
+      new IntersectionObserver(entries => {
+        cardVisible = entries[0].isIntersecting;
+        if (cardVisible) resultReady = false;
+        updateFloating();
+      }, { threshold: 0 }).observe(card);
+    } else {
+      document.querySelectorAll('[data-count]').forEach(countUp);
+      document.querySelectorAll('.feature').forEach(element => {
+        element.classList.add('in-view');
+      });
+    }
+
+    if (!reducedMotion) {
+      let scheduled = false;
+
+      window.addEventListener('scroll', () => {
+        if (scheduled) return;
+        scheduled = true;
+
+        requestAnimationFrame(() => {
+          document.querySelectorAll('.blob').forEach(element => {
+            element.style.translate = '0 ' + Math.min(window.scrollY * .05, 65) + 'px';
+          });
+          scheduled = false;
+        });
+      }, { passive: true });
+    }
+
+    // ② 대화창 동작 — 메시지 본문은 Web Chat만 렌더링
+    function resizeInput() {
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 132) + 'px';
+      sendButton.disabled = !connected || !input.value.trim();
+    }
+
+    input.addEventListener('input', resizeInput);
+
+    input.addEventListener('keydown', event => {
+      if (
+        event.key === 'Enter' &&
+        !event.shiftKey &&
+        !event.isComposing &&
+        event.keyCode !== 229
+      ) {
+        event.preventDefault();
+        sendMessage(input.value);
+      }
+    });
+
+    document.getElementById('composer').addEventListener('submit', event => {
+      event.preventDefault();
+      sendMessage(input.value);
+    });
+
+    function sendMessage(text) {
+      text = String(text || '').trim();
+      if (!connected || !store || !text) return;
+
+      const first = !document.body.classList.contains('is-started');
+      document.body.classList.add('is-started', 'is-working');
+      workingSince = Date.now();
+      resultReady = false;
+
+      document.getElementById('suggestions').replaceChildren();
+      input.value = '';
+      resizeInput();
+      updateWorking();
+
+      store.dispatch({
+        type: "WEB_CHAT/SEND_MESSAGE",
+        payload: { text }
+      });
+
+      if (first) requestAnimationFrame(goToChat);
+    }
+
+    const exampleTexts = [
+      '가을 학교 축제 기획해 줘',
+      '탄소중립 캠페인 홍보물 만들어 줘',
+      '교사 AI 연수 프로그램 제안해 줘'
+    ];
+
+    exampleTexts.forEach(text => {
+      const button = document.createElement('button');
+      button.className = 'chip';
+      button.textContent = text;
+      button.disabled = true;
+      button.addEventListener('click', () => sendMessage(text));
+      document.getElementById('examples').append(button);
+    });
+
+    function setConnected(value) {
+      connected = value;
+      document.body.classList.toggle('is-connected', value);
+      input.disabled = !value;
+
+      document.querySelectorAll('#examples .chip').forEach(button => {
+        button.disabled = !value;
+      });
+
+      resizeInput();
+    }
+
+    function elapsed() {
+      const seconds = Math.floor((Date.now() - workingSince) / 1000);
+      return Math.floor(seconds / 60) + ':' + String(seconds % 60).padStart(2, '0');
+    }
+
+    function updateFloating() {
+      const floating = document.getElementById('floating');
+      floating.hidden = cardVisible || (!workingSince && !resultReady);
+      floating.textContent = resultReady
+        ? '결과가 도착했어요 ↑'
+        : '팀이 작업 중 · ' + elapsed();
+    }
+
+    function updateWorking() {
+      if (workingSince) {
+        document.getElementById('working-text').textContent = '팀이 작업 중 · ' + elapsed();
+        document.getElementById('slow-note').hidden = Date.now() - workingSince < 20000;
+      }
+
+      updateFloating();
+    }
+
+    setInterval(updateWorking, 1000);
+    document.getElementById('floating').addEventListener('click', goToChat);
+
+    function showSuggestions(actions) {
+      const container = document.getElementById('suggestions');
+      container.replaceChildren();
+
+      (actions || []).forEach(action => {
+        const button = document.createElement('button');
+        button.className = 'chip';
+        button.textContent = action.title || action.value;
+
+        button.addEventListener('click', () => {
+          if (action.type === 'openUrl') {
+            try {
+              const url = new URL(action.value);
+              if (['https:', 'http:'].includes(url.protocol)) {
+                window.open(url.href, '_blank', 'noopener,noreferrer');
+              }
+            } catch {}
+          } else {
+            sendMessage(action.value || action.title);
+          }
+        });
+
+        container.append(button);
+      });
+    }
 
     function showError(message) {
-      status.hidden = false;
-      status.textContent = message;
+      setConnected(false);
+      document.body.classList.add('is-error');
+      document.body.classList.remove('is-working');
+      workingSince = 0;
+      document.getElementById('error-detail').textContent = message;
+      updateFloating();
     }
+
+    // ③ 원래 연결 흐름 — CORS 단순 요청 유지
+    const BROKER_URL = "https://dl-broker-juwon-4jt3z.azurewebsites.net/api/directlineToken";
+    const SEALED = "ePTj6LDaH2emLimO-MTk5WA3v4tcqHUlbJDVvP22AP4fzw7gMnrRuY7C9JckVoLlc2TppJ6fi0IMWTDV3MGKctd9MTLj8IHu6RT6477JBHz8WSxHI_YU4GK9Yb84yYAmSRN2O7owtGzORVb_mGwtgJ6_KgdcnFMZY7Z3VyaFvPL_MXbsNtulonfaZcP3g3S2wArBOhnqLsapxfwQN943BYnEAwcO0X1kIZ_bzcLE1AVz0QYTKrbqwKOARe3ZeBNsrioNrAk-GFkZjdj0MTfHH19wqaKQqjQtqYRyJ0EoDMo50frvT0eEeONEUkRb1RkpHMkeBHSnieb4ibtYo9rT3YFZcIlepAJC9IZG8mVkjKneJRO73x7rn6ga2rBUjcYtNese2lBubMciOzBDJvppIqvGoiUquTJq9ESSVfE6KRsDbZXNfXXgPtuGAAWIeju74oXQxpktckNH5YhdveIOKE2-lQHHKxCluKLgAmdzFURK550oXZB97puHPjE6oRG7hGW1kANxzRca-OmrrmoBPiqWIQcsByWZnpyeT5KvURqOui_QNlzqn8a3cVSLVW6fUGmL0toA1M428-r36KgAGkXfG0sEmtf1bxSN8iDWDvwhc8ZeZNDvKX1I2gFTWITkrlFwH757hw6JDbdhUNDh";
+
+    const status = document.getElementById('status');
+    let connecting = false;
 
     async function connect() {
-      if (!window.WebChat ||
-          typeof WebChat.createDirectLine !== "function" ||
-          typeof WebChat.renderWebChat !== "function") {
-        showError("채팅 구성 요소를 불러오지 못했습니다. 네트워크를 확인한 뒤 새로고침해 주세요.");
-        return;
-      }
+      if (connecting) return;
+      connecting = true;
 
-      let response;
+      document.body.classList.remove('is-error');
+      setConnected(false);
+      status.textContent = '팀을 부르는 중…';
+
       try {
-        // Keep this a simple CORS request; the broker may not support preflight.
-        response = await fetch(BROKER_URL, {
-          method: "POST",
-          body: JSON.stringify({ sealed: SEALED })
+        if (
+          !window.WebChat ||
+          typeof WebChat.createDirectLine !== 'function' ||
+          typeof WebChat.renderWebChat !== 'function'
+        ) {
+          throw new Error('채팅 구성 요소를 불러오지 못했습니다. 네트워크를 확인한 뒤 다시 시도해 주세요.');
+        }
+
+        if (connectionSubscription) connectionSubscription.unsubscribe();
+        if (directLine) directLine.end();
+
+        let response;
+
+        try {
+          response = await fetch(BROKER_URL, {
+            method: "POST",
+            body: JSON.stringify({ sealed: SEALED })
+          });
+        } catch (error) {
+          throw new Error('서버에 연결하지 못했습니다. ' + error.message);
+        }
+
+        if (!response.ok) {
+          throw new Error('서버가 연결 요청을 처리하지 못했습니다 (HTTP ' + response.status + ').');
+        }
+
+        let data;
+
+        try {
+          data = await response.json();
+        } catch {
+          throw new Error('서버 응답을 읽을 수 없습니다. 잠시 후 다시 시도해 주세요.');
+        }
+
+        if (!data || typeof data.token !== 'string' || !data.token.trim()) {
+          throw new Error('서버에서 연결 토큰을 받지 못했습니다. 암호와 배포 주소를 확인해 주세요.');
+        }
+
+        directLine = WebChat.createDirectLine({ token: data.token });
+
+        store = WebChat.createStore({}, () => next => action => {
+          const result = next(action);
+
+          if (action.type === 'DIRECT_LINE/CONNECT_FULFILLED') {
+            setConnected(true);
+          }
+
+          if (action.type === 'DIRECT_LINE/INCOMING_ACTIVITY') {
+            const activity = action.payload.activity;
+
+            if (
+              activity &&
+              activity.from?.role !== 'user' &&
+              activity.type === 'message'
+            ) {
+              if (workingSince) resultReady = !cardVisible;
+
+              workingSince = 0;
+              document.body.classList.remove('is-working');
+              showSuggestions(activity.suggestedActions?.actions);
+              updateFloating();
+            }
+          }
+
+          return result;
         });
-      } catch {
-        showError("서버에 연결하지 못했습니다. 네트워크와 배포 주소를 확인해 주세요.");
-        return;
-      }
-      if (!response.ok) {
-        showError("서버가 연결 요청을 처리하지 못했습니다 (HTTP " + response.status + ").");
-        return;
-      }
 
-      let data;
-      try {
-        data = await response.json();
-      } catch {
-        showError("서버 응답을 읽을 수 없습니다. 잠시 후 다시 시도해 주세요.");
-        return;
-      }
-      if (!data || typeof data.token !== "string" || !data.token.trim()) {
-        showError("서버에서 연결 토큰을 받지 못했습니다. 암호와 배포 주소를 확인해 주세요.");
-        return;
-      }
-
-      try {
-        const directLine = WebChat.createDirectLine({ token: data.token });
-        status.hidden = true;
         directLine.postActivity({
-          type: "event", name: "startConversation", from: { id: "user" }
+          type: "event",
+          name: "startConversation",
+          from: { id: "user" }
         }).subscribe({
-          error: () => showError("첫 인사를 요청하지 못했습니다. 채팅창에 메시지를 입력해 주세요.")
+          error: () => {
+            status.textContent = '첫 인사를 요청하지 못했습니다. 채팅창에 메시지를 입력해 주세요.';
+            status.style.display = 'block';
+          }
         });
-        WebChat.renderWebChat({ directLine, locale: "ko-KR" }, document.getElementById("webchat"));
-      } catch {
-        showError("채팅을 시작하지 못했습니다. 새로고침 후 다시 시도해 주세요.");
+
+        WebChat.renderWebChat({
+          directLine,
+          store,
+          locale: "ko-KR",
+          userID: 'user',
+          styleOptions: {
+            hideSendBox: true,
+            rootHeight: "100%",
+            backgroundColor: "transparent",
+            primaryFont: "'Pretendard Variable', -apple-system, sans-serif",
+            bubbleBackground: "transparent",
+            bubbleBorderWidth: 0,
+            bubbleMaxWidth: 720,
+            bubbleMinWidth: 0,
+            bubbleFromUserBackground: "linear-gradient(135deg, #EEF0FF, #FBEFFF)",
+            bubbleFromUserBorderWidth: 0,
+            bubbleFromUserBorderRadius: 20,
+            botAvatarInitials: '',
+            userAvatarInitials: '',
+            avatarSize: 0,
+            hideScrollToEndButton: false,
+            sendTimeout: 300000,
+            lineHeight: 1.7,
+            bubbleTextColor: '#373348',
+            bubbleFromUserTextColor: '#39314d'
+          }
+        }, document.getElementById('webchat'));
+
+        connectionSubscription = directLine.connectionStatus$.subscribe(value => {
+          if (value === 2) setConnected(true);
+
+          if (value === 3) {
+            setConnected(false);
+            status.textContent = '다시 연결하는 중…';
+          }
+
+          if (value === 4 || value === 5) {
+            showError('대화 연결이 종료되었습니다. 다시 시도해 주세요.');
+          }
+        });
+      } catch (error) {
+        showError(error.message || String(error));
+      } finally {
+        connecting = false;
       }
     }
 
+    document.getElementById('retry').addEventListener('click', connect);
     connect();
   </script>
 </body>
 </html>
+```
